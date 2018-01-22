@@ -13,10 +13,11 @@ class LoginForm extends React.Component
     },
     loading: false,
     errors: {}
-  }
+  };
 
 // useful for any text change form
-  onChange = e => this.setState({data: {...this.state.data, [e.target.name]: e.target.value}
+  onChange = e => this.setState({
+    data: {...this.state.data, [e.target.name]: e.target.value}
   });
 
   onSubmit = () => {
@@ -25,50 +26,53 @@ class LoginForm extends React.Component
     if(Object.keys(errors).length === 0)
     {
       this.setState({loading: true});
-      this.props.submit(this.state.data).catch(err => this.setState({errors: err.response.data.errors, loading: false}));
+      this.props.submit(this.state.data).catch(err => this.setState({errors:
+        err.response.data.errors, loading: false}));
     }
-  }
+  };
 
-  validate = (data) => {
+  validate = data => {
     const errors = {};
     if(!Validator.isEmail(data.email)) errors.email = "Invalid email";
     if(!data.password) errors.password = "Can't be blank";
     return errors;
 
-  }
+  };
 
   render(){
     const {data, errors, loading} = this.state;
     return(
       <Form onSubmit={this.onSubmit} loading={loading}>
-        {errors.global && <Message negative>
-          <Message.Header>Something went wrong.</Message.Header>
-          <p>{errors.global}</p>
-        </Message>}
-        <Form.Field error={!!errors.email}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="example@example.com"
-            value={data.email}
-            onChange={this.onChange}
-            />
-          {errors.email && <InLineError text={errors.email}/>}
-        </Form.Field>
-        <Form.Field error={!!errors.password}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Make it secure"
-            value={data.password}
-            onChange={this.onChange}
-            />
-          {errors.password && <InLineError text={errors.password}/>}
-        </Form.Field>
+        {errors.global && (
+          <Message negative>
+            <Message.Header>Something went wrong.</Message.Header>
+            <p>{errors.global}</p>
+        </Message>
+      )}
+      <Form.Field error={!!errors.email}>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="example@example.com"
+          value={data.email}
+          onChange={this.onChange}
+          />
+        {errors.email && <InLineError text={errors.email}/>}
+      </Form.Field>
+      <Form.Field error={!!errors.password}>
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Make it secure"
+          value={data.password}
+          onChange={this.onChange}
+        />
+        {errors.password && <InLineError text={errors.password}/>}
+      </Form.Field>
         <Button primary>Login</Button>
       </Form>
     );
